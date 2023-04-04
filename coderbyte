@@ -1,0 +1,119 @@
+import React, { useState, createContext, useContext } from 'react';
+import { createRoot } from 'react-dom/client';
+
+const languages = ['JavaScript', 'Python'];
+// create context api for language
+const LanguageContext = createContext();
+
+// create language provider
+const LanguageProvider = ({ children }) => {
+  const [language, setLanguage] = useState(languages[0]);
+  const values = {
+    languages,
+    language,
+    setLanguage
+  }
+  return (
+    <LanguageContext.Provider value={values}>{children}</LanguageContext.Provider>
+  )
+}
+
+// create use context
+const useLanguageContext = () => {
+  return useContext(LanguageContext)
+}
+
+function App() {
+  // implement Context here so can be used in child components
+  return (
+    <LanguageProvider>
+      <MainSection />
+    </LanguageProvider>
+  );
+}
+
+function MainSection() {
+  const {language, languages, setLanguage} = useLanguageContext();
+
+  // taking currect index from the languages
+  const currectIndex = languages.indexOf(language);
+  // toggle favourite language
+  const toggleFavoriteLanguage = () => {
+    // checking default language already has,
+    // if has set default langauge 
+    // otherwise set user desire language value
+    if(currectIndex === languages.length - 1){
+      setLanguage(languages[0]);
+    }else{
+      setLanguage(languages[currectIndex+1])
+    }
+  }
+  return (
+    <div>
+      <p>Favorite programing language: <span style={{"color":"#00FF00"}}>{language}</span></p>
+      <button id="changeFavorite" onClick={toggleFavoriteLanguage}>Toggle language</button>
+    </div>
+  )
+}
+
+const container = document.getElementById('root');
+const root = createRoot(container);
+root.render(<App />);
+
+=======================================
+======================================
+===================================
+
+function SimplePassword(str) {
+
+  // store error if has any error
+  const errors = {};
+
+  // checking user value is empty, if it is empty retrun false
+  if(str.length < 1) return false;
+
+  // checking password has capital letter or not
+  // if has added capitalLetter error property
+  if(!str.split("").some(v => v === v.toUpperCase())){
+     errors.capitalLetter = "Please provide at least One capital letter"
+  }
+
+  // checking giving str value has at least on digit or not
+  // is has added isContainNumber error property
+  if(!(/\d/).test(str)){
+    errors.isContainNumber = "Please provide at least one digit or number"
+  }
+
+  // checking giving str value value has punctuation mark or mathmatical symbol
+  // if has added isContainPunctuationMarkOrMathSymbol error property
+  if(!(/[.,!?:;+-/*]/).test(str)){
+    errors.isContainPunctuationMarkOrMathSymbol = "Please provide at least one punctuation marks or mathmetical one symbol"
+  }
+
+  // checking giving str value has word "password"
+  // if has added isValuePassword error property
+  if(!(/password/i).test(str)){
+    errors.isValuePassword = "Please do not provide password like password"
+  }
+
+  // checking giving str value must be greater than 7 and less than 31
+  // if has added isValuePassword error property.
+  if(!(str.length > 7 && str.length < 31)){
+    errors.isValuePassword = "Password Must Be at least between 8 to 30"
+  }
+
+  // checking error has any property
+  const isValidPassword = Object.keys(errors).length === 0;
+
+  // if error has any property, return true, means password is wrong
+  // otherwise return false, means password is correct
+  if(isValidPassword){
+    return false
+  }
+  
+  return true; 
+
+}
+   
+// keep this function call here 
+console.log(SimplePassword(readline()));
