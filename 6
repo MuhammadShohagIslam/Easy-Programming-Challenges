@@ -1,1 +1,57 @@
+/* 
+    *** React Context API ***
+*/
 
+function SimplePassword(str) {
+
+  // store error if has any error
+  const errors = {};
+
+  // checking user value is empty, if it is empty retrun false
+  if(str.length < 1) return false;
+
+  // checking password has capital letter or not
+  // if has added capitalLetter error property
+  if(!str.split("").some(v => v === v.toUpperCase())){
+     errors.capitalLetter = "Please provide at least One capital letter"
+  }
+
+  // checking giving str value has at least on digit or not
+  // is has added isContainNumber error property
+  if(!(/\d/).test(str)){
+    errors.isContainNumber = "Please provide at least one digit or number"
+  }
+
+  // checking giving str value value has punctuation mark or mathmatical symbol
+  // if has added isContainPunctuationMarkOrMathSymbol error property
+  if(!(/[.,!?:;+-/*]/).test(str)){
+    errors.isContainPunctuationMarkOrMathSymbol = "Please provide at least one punctuation marks or mathmetical one symbol"
+  }
+
+  // checking giving str value has word "password"
+  // if has added isValuePassword error property
+  if(!(/password/i).test(str)){
+    errors.isValuePassword = "Please do not provide password like password"
+  }
+
+  // checking giving str value must be greater than 7 and less than 31
+  // if has added isValuePassword error property.
+  if(!(str.length > 7 && str.length < 31)){
+    errors.isValuePassword = "Password Must Be at least between 8 to 30"
+  }
+
+  // checking error has any property
+  const isValidPassword = Object.keys(errors).length === 0;
+
+  // if error has any property, return true, means password is wrong
+  // otherwise return false, means password is correct
+  if(isValidPassword){
+    return false
+  }
+  
+  return true; 
+
+}
+   
+// keep this function call here 
+console.log(SimplePassword(readline()));
