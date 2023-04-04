@@ -1,0 +1,65 @@
+/*
+  *** React Context API ***
+*/
+
+import React, { useState, createContext, useContext } from 'react';
+import { createRoot } from 'react-dom/client';
+
+const languages = ['JavaScript', 'Python'];
+// create context api for language
+const LanguageContext = createContext();
+
+// create language provider
+const LanguageProvider = ({ children }) => {
+  const [language, setLanguage] = useState(languages[0]);
+  const values = {
+    languages,
+    language,
+    setLanguage
+  }
+  return (
+    <LanguageContext.Provider value={values}>{children}</LanguageContext.Provider>
+  )
+}
+
+// create use context
+const useLanguageContext = () => {
+  return useContext(LanguageContext)
+}
+
+function App() {
+  // implement Context here so can be used in child components
+  return (
+    <LanguageProvider>
+      <MainSection />
+    </LanguageProvider>
+  );
+}
+
+function MainSection() {
+  const {language, languages, setLanguage} = useLanguageContext();
+
+  // taking currect index from the languages
+  const currectIndex = languages.indexOf(language);
+  // toggle favourite language
+  const toggleFavoriteLanguage = () => {
+    // checking default language already has,
+    // if has set default langauge 
+    // otherwise set user desire language value
+    if(currectIndex === languages.length - 1){
+      setLanguage(languages[0]);
+    }else{
+      setLanguage(languages[currectIndex+1])
+    }
+  }
+  return (
+    <div>
+      <p>Favorite programing language: <span style={{"color":"#00FF00"}}>{language}</span></p>
+      <button id="changeFavorite" onClick={toggleFavoriteLanguage}>Toggle language</button>
+    </div>
+  )
+}
+
+const container = document.getElementById('root');
+const root = createRoot(container);
+root.render(<App />);
